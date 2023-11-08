@@ -267,5 +267,6 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Customer service calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικό Αριθμό Τηλεφώνων προς την Εξυπηρέτηση Πελατών')
 plt.show()
+plt.show()
 
 
