@@ -1,11 +1,19 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import scipy.stats as stats
 import numpy as np
 import time
-from scipy.stats import norm
-from matplotlib.ticker import MaxNLocator
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn import metrics
+from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
+from statsmodels.graphics.gofplots import qqplot
+import scipy.stats as stats
+from scipy.stats import pearsonr, spearmanr, norm, chi2_contingency, kurtosis, skew
+from sklearn.covariance import EllipticEnvelope
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from scipy.stats import anderson
+
 
 data = pd.read_csv('telecom_churn.csv')
 # print(data)
@@ -307,6 +315,321 @@ plt.show()
 
 time.sleep(5)
 
+numeric_columns = data.select_dtypes(include=np.number).columns
+
+summary_stats = data[numeric_columns].describe().transpose()
+print(round(summary_stats, 2))
+
+def eda_plots(data, ask=False):
+    plt.close('all')
+    numeric_columns = data.select_dtypes(include=np.number).columns
+    y = data[numeric_columns]
+    n = len(numeric_columns)
+
+    for i in range(n):
+        if not ask:
+            plt.figure()
+            plt.subplot(2, 2, 1)
+            sns.violinplot(y.iloc[:, i])
+            plt.title('Violin Plot - ' + numeric_columns[i])
+
+            plt.subplot(2, 2, 2)
+            plt.hist(y.iloc[:, i], density=True)
+            plt.title('Histogram - ' + numeric_columns[i])
+            sns.kdeplot(y.iloc[:, i], color='r')
+
+            plt.subplot(2, 2, 3)
+            qqplot(y.iloc[:, i], line='s')
+            plt.title('QQ Plot - ' + numeric_columns[i])
+
+            plt.subplot(2, 2, 4)
+            plt.boxplot(y.iloc[:, i], vert=False)
+            plt.title('Boxplot - ' + numeric_columns[i])
+
+            time.sleep(5)
+
+        if not ask:
+            plt.tight_layout()
+            plt.show()
+
+        elif i == n - 1:
+            plt.show(block=True)
+
+
+eda_plots(data)
+
+eda_plots(data, ask=True)
+
+
+# Correlation
+
+rounded_data = np.round(data[numeric_columns], 2)
+print(rounded_data.describe())
+
+# Υπολογισμός πίνακα συσχέτισης Pearson
+correlation_pearson = data[numeric_columns].corr(method='pearson')
+print(correlation_pearson)
+
+# Σχεδίαση πίνακα συσχέτισης
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_pearson, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Pearson Correlation Heatmap")
+plt.show()
+
+# Υπολογισμός πίνακα συσχέτισης Spearman
+correlation_spearman = data[numeric_columns].corr(method='spearman')
+print(correlation_spearman)
+
+# Σχεδίαση πίνακα συσχέτισης Spearman
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_spearman, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Spearman Correlation Heatmap")
+plt.show()
+
+# Υπολογισμός συσχέτισης και εκτέλεση του τεστ
+correlation_minutes_charge = pearsonr(data['Total day minutes'], data['Total day charge'])
+print(f"Correlation between Total day minutes and Total day charge: {correlation_minutes_charge[0]:.4f}")
+
+# Τεστ συσχέτισης με χρήση cor.test
+cor_test_minutes_charge = spearmanr(data['Total day minutes'], data['Total day charge'])
+print(cor_test_minutes_charge)
+
+# Εύρεση εκτός των κύριων ακτίνων με Mahalanobis
+features = ['Total day minutes', 'Total day calls', 'Total day charge']
+envelope = EllipticEnvelope()
+envelope.fit(data[features])
+outliers = envelope.predict(data[features])
+
+# Ποσοστό εκτός των κύριων ακτίνων
+outlier_percentage = (sum(outliers == -1) / len(data)) * 100
+print(f"Percentage of outliers: {outlier_percentage:.1f}%")
+
+
+# Εμφάνιση boxplot
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=data[numeric_columns])
+plt.title("Boxplot of Numeric Variables")
+plt.xticks(rotation=45)
+plt.show()
+
+# Εύρεση ακραίων τιμών
+for col in numeric_columns:
+    # Πάρτε τις γραμμές του boxplot
+    lines = sns.boxplot(data=data[col], showfliers=False).get_lines()
+
+    # Πάρτε τα δεδομένα των ακραίων τιμών
+    outliers = lines[0].get_ydata()
+
+    if len(outliers) != 0:
+        print('-------------------------------------------------------')
+        print(f'Outliers for variable {col}')
+        print(f'{len(outliers)} outliers')
+        print(f'{round(100 * len(outliers) / len(data[col]), 1)}% outliers')
+        print(outliers)
+
+
+# --- Εκτέλεση των Chi-Square Tests και εμφάνιση των contingency tables
+
+def chi_square_test(cross_tab):
+    chi2, p, _, _ = chi2_contingency(cross_tab)
+    print(f"Chi-Square Value: {chi2:.4f}")
+    print(f"P-value: {p:.4f}")
+    print("")
+
+
+# Churn vs State
+cross_tab_state = pd.crosstab(data['Churn'], data['State'])
+chi_square_test(cross_tab_state)
+
+# Churn vs International Plan
+cross_tab_international_plan = pd.crosstab(data['Churn'], data['International plan'])
+chi_square_test(cross_tab_international_plan)
+
+# Churn vs Voice Mail Plan
+cross_tab_voice_mail_plan = pd.crosstab(data['Churn'], data['Voice mail plan'])
+chi_square_test(cross_tab_voice_mail_plan)
+
+# -----------------------------------------------------------------------------
+
+
+# Checking for Normality with density plots
+
+numeric_columns = data.select_dtypes(include=np.number).columns
+
+fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+axes = axes.flatten()
+
+for i, col in enumerate(numeric_columns[:16]):
+    axes[i].hist(data[col], density=True, bins='auto', alpha=0.7, label='Histogram')
+    axes[i].plot(np.linspace(data[col].min(), data[col].max(), 100), norm.pdf(np.linspace(data[col].min(), data[col].max(), 100),
+                 loc=data[col].mean(), scale=data[col].std()), label='Normal Distribution', linestyle='dashed', color='red')
+    axes[i].set_title(f'Density Plot of Variable {i+1}')
+    axes[i].legend()
+    plt.tight_layout()
+    plt.show()
+    time.sleep(5)
+
+#--- Checking for Normality with Cumulative Distribution function plots
+
+fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+axes = axes.flatten()
+
+for i, col in enumerate(numeric_columns[:16]):
+    y1 = data[col]
+    axes[i].plot(np.sort(y1), np.arange(1, len(y1) + 1) / len(y1), label='Empirical CDF')
+    index = np.linspace(np.min(y1), np.max(y1), 100)
+    cdf_normal = norm.cdf(index, loc=y1.mean(), scale=y1.std())
+    axes[i].plot(index, cdf_normal, label='Normal Distribution', linestyle='dashed', color='red')
+    axes[i].set_title(f'CDF Plot of Variable {i+1}')
+    axes[i].legend()
+    plt.tight_layout()
+    plt.show()
+    time.sleep(5)
+
+#--- Skewness & kurtosis
+
+skewness = data[numeric_columns].apply(skew)
+kurt = data[numeric_columns].apply(kurtosis)
+
+print("Skewness:")
+print(skewness)
+
+print("\nKurtosis:")
+print(kurt)
+
+
+# --- Testing for normality
+numeric_columns = data.select_dtypes(include=np.number)
+y = numeric_columns
+
+for col in y.columns:
+    ks_stat, ks_p_value = stats.kstest(y[col], 'norm')
+    print(f"Kolmogorov-Smirnov test for {col}: KS Statistic = {ks_stat}, p-value = {ks_p_value}")
+
+anderson_test_results = y.apply(lambda x: anderson(x).statistic)
+print("Anderson-Darling test results:")
+print(anderson_test_results)
+
+shapiro_test_results = y.apply(stats.shapiro)
+print("Shapiro-Wilk test results:")
+print(shapiro_test_results)
+
+t_test_results = [stats.ttest_1samp(y[col], 0) for col in y.columns]
+print("One-sample t-test results:")
+print(t_test_results)
+
+
+
+# Logistic Regression
+
+# Διαχωρισμός των ανεξάρτητων (X) και εξαρτημένης (y) μεταβλητής
+data_encoded = pd.get_dummies(data, columns=['International plan', 'Voice mail plan', 'State'])
+
+# Διαχωρισμός των ανεξάρτητων (X) και εξαρτημένης (y) μεταβλητής
+X = data_encoded.drop('Churn', axis=1)
+y = data_encoded['Churn']
+
+# Ορισμός του μοντέλου Logistic Regression
+logreg = LogisticRegression(solver='liblinear', max_iter=1000)
+
+# Εκπαίδευση του μοντέλου
+logreg.fit(X, y)
+
+# Εκτύπωση των συντελεστών
+print("Coefficients:")
+print(logreg.coef_)
+
+# Προβλέψεις πιθανοτήτων
+y_pred_probs = logreg.predict_proba(X)[:, 1]
+print("Predicted Probabilities:")
+print(y_pred_probs[:10])
+
+# Κατωφλιοποίηση των προβλέψεων
+threshold = 0.5
+y_pred_class = np.where(y_pred_probs > threshold, 1, 0)
+
+# Υπολογισμός του confusion matrix
+conf_matrix = metrics.confusion_matrix(y, y_pred_class)
+print("Confusion Matrix:")
+print(conf_matrix)
+
+# Υπολογισμός του classification report
+classification_report = metrics.classification_report(y, y_pred_class)
+print("Classification Report:")
+print(classification_report)
+
+# Υπολογισμός του training error rate
+train_error_rate = 1 - logreg.score(X, y)
+print(f"Training Error Rate: {train_error_rate}")
+
+# Διαχωρισμός των δεδομένων σε training και test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=1)
+
+# Εκπαίδευση του μοντέλου στα training data
+logreg.fit(X_train, y_train)
+
+# Προβλέψεις πιθανοτήτων για τα test data
+y_pred_probs_test = logreg.predict_proba(X_test)[:, 1]
+
+# Κατωφλιοποίηση των προβλέψεων για τα test data
+y_pred_class_test = np.where(y_pred_probs_test > threshold, 1, 0)
+
+# Υπολογισμός του confusion matrix για τα test data
+conf_matrix_test = metrics.confusion_matrix(y_test, y_pred_class_test)
+print("Confusion Matrix (Test Data):")
+print(conf_matrix_test)
+
+
+
+# Fitting Classification Trees
+
+tree_mod = DecisionTreeClassifier(random_state=42)
+
+data_encoded = pd.get_dummies(data, columns=['International plan', 'Voice mail plan', 'State'])
+
+X = data_encoded.drop('Churn', axis=1)
+y = data_encoded['Churn']
+tree_mod.fit(X, y)
+
+# Display summary
+tree_rules = export_text(tree_mod, feature_names=list(X.columns))
+print(tree_rules)
+
+# Display the tree
+export_graphviz(tree_mod, out_file='tree.dot', feature_names=list(X.columns),
+                class_names=['False', 'True'], filled=True, rounded=True,
+                special_characters=True)
+
+# Calculate test classification
+np.random.seed(2)
+train_idx = np.random.choice(range(len(data)), int(len(data)/3), replace=False)
+test_idx = np.setdiff1d(range(len(data)), train_idx)
+
+data_test = data.iloc[test_idx]
+churn_test = data['Churn'].iloc[test_idx]
+
+tree_pred = tree_mod.predict(X.iloc[test_idx])
+conf_matrix = confusion_matrix(churn_test, tree_pred)
+print(conf_matrix)
+accuracy = np.sum(np.diag(conf_matrix)) / np.sum(conf_matrix)
+print(f'Accuracy: {accuracy}')
+
+# Pruning the tree
+np.random.seed(3)
+tree_cv = DecisionTreeClassifier(random_state=42)
+tree_cv.fit(X.iloc[train_idx], y.iloc[train_idx])
+
+prune_path = tree_cv.cost_complexity_pruning_path(X.iloc[train_idx], y.iloc[train_idx])
+alphas = prune_path.ccp_alphas
+
+for alpha in alphas:
+    pruned_tree = DecisionTreeClassifier(random_state=42, ccp_alpha=alpha)
+    pruned_tree.fit(X.iloc[train_idx], y.iloc[train_idx])
+
+    prune_pred = pruned_tree.predict(X.iloc[test_idx])
+    prune_conf_matrix = confusion_matrix(churn_test, prune_pred)
+    accuracy = np.sum(np.diag(prune_conf_matrix)) / np.sum(prune_conf_matrix)
+    print(f'Alpha: {alpha}, Accuracy: {accuracy}')
 
 
 
