@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats as stats
 import numpy as np
+import time
 from scipy.stats import norm
 from matplotlib.ticker import MaxNLocator
 
@@ -34,6 +35,8 @@ plt.title('Κατάσταση')
 plt.xticks(rotation=90)
 plt.show()
 
+time.sleep(5)
+
 international_plan_counts = (data['International plan'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(10, 6))
 plt.bar(international_plan_counts.index, international_plan_counts.values, color='blue')
@@ -42,6 +45,8 @@ plt.ylabel('Ποσοστό (%)')
 plt.title('Ποσοστό International Plan')
 plt.xticks(rotation=90)
 plt.show()
+
+time.sleep(5)
 
 voice_mail_plan_counts = (data['Voice mail plan'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(10, 6))
@@ -52,11 +57,15 @@ plt.title('Ποσοστό Voice Mail Plan')
 plt.xticks(rotation=90)
 plt.show()
 
+time.sleep(5)
+
 churn_counts = (data['Churn'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(6, 6))
 plt.pie(churn_counts.values, labels=churn_counts.index, autopct='%1.1f%%', startangle=140)
 plt.title('Ποσοστό Churn')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Account length'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -72,6 +81,8 @@ stats.probplot(data['Account length'], dist='norm', plot=plt)
 plt.title('QQ-plot για Μήκος Λογαριασμού')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Area code'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Area code']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -85,6 +96,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Area code'], dist='norm', plot=plt)
 plt.title('QQ-plot για Κωδικό Περιοχής')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -100,6 +113,8 @@ stats.probplot(data['Total day minutes'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Λεπτά Ημέρας')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total day calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -113,6 +128,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Total day calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Τηλέφωνα Ημέρας')
 plt.show()
+
+time.sleep(10)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -128,6 +145,8 @@ stats.probplot(data['Total day charge'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολική Χρέωση Ημέρας')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total eve calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -141,6 +160,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Total eve calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Τηλέφωνα Απογεύματος')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -156,6 +177,8 @@ stats.probplot(data['Total eve minutes'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Λεπτά Απογεύματος')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total eve charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -169,6 +192,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Total eve charge'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολική Χρέωση Απογεύματος')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -184,6 +209,8 @@ stats.probplot(data['Total night minutes'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Λεπτά το Βράδυ')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total night calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -197,6 +224,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Total night calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Τηλέφωνα το Βράδυ')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -212,6 +241,8 @@ stats.probplot(data['Total night charge'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολική Χρέωση το Βράδυ')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total intl calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -225,6 +256,8 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Total intl calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικό Αριθμό Διεθνών κλήσεων')
 plt.show()
+
+time.sleep(5)
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -240,6 +273,8 @@ stats.probplot(data['Total intl minutes'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Λεπτά Διεθνών κλήσεων')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total intl charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -254,6 +289,8 @@ stats.probplot(data['Total intl charge'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολική Χρέωση Διεθνών κλήσεων')
 plt.show()
 
+time.sleep(5)
+
 plt.figure(figsize=(10, 6))
 plt.hist(data['Customer service calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Customer service calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -267,5 +304,9 @@ plt.figure(figsize=(8, 6))
 stats.probplot(data['Customer service calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικό Αριθμό Τηλεφώνων προς την Εξυπηρέτηση Πελατών')
 plt.show()
+
+time.sleep(5)
+
+
 
 
