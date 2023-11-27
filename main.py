@@ -15,6 +15,8 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
 from scipy.stats import anderson
 #KNN Class import from Scikit Learn
 from sklearn.neighbors import KNeighborsClassifier
+#Random Forest class import from Scikit Learn
+from sklearn.ensemble import RandomForestClassifier
 
 data = pd.read_csv('telecom_churn.csv')
 # print(data)
@@ -661,6 +663,33 @@ neigh.fit(X_train, y_train)
 y_pred = neigh.predict(X_test)
 
 # Print the predicted labels for the test set
+print("Predicted Labels for the Test Set:")
+print(y_pred)
+
+# Compute accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2%}")
+
+# Compute precision
+precision = precision_score(y_test, y_pred)
+print(f"Precision: {precision:.2%}")
+
+#Random Forest Classification
+print("\nRandom Forest Classifier\n")
+data_encoded = pd.get_dummies(data, columns=['International plan', 'Voice mail plan', 'State'])
+
+X = data_encoded.drop('Churn', axis=1)
+y = data_encoded['Churn']
+
+random_state = int(time.time())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
+
+# Initialize and train the Random Forest Classifier
+rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier.fit(X_train, y_train)
+
+# Predictions on the test set
+y_pred = rf_classifier.predict(X_test)
 print("Predicted Labels for the Test Set:")
 print(y_pred)
 
