@@ -11,9 +11,10 @@ from scipy.stats import pearsonr, spearmanr, norm, chi2_contingency, kurtosis, s
 from sklearn.covariance import EllipticEnvelope
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score
 from scipy.stats import anderson
-
+#KNN Class import from Scikit Learn
+from sklearn.neighbors import KNeighborsClassifier
 
 data = pd.read_csv('telecom_churn.csv')
 # print(data)
@@ -22,6 +23,7 @@ print(data.columns)
 print(data.describe())
 print(data.dtypes)
 
+# Converts data to numbers - errors='coerse' is used for any data that can't be converted - NaN
 data['Account length'] = pd.to_numeric(data['Account length'], errors='coerce')
 data['Area code'] = pd.to_numeric(data['Area code'], errors='coerce')
 data['Number vmail messages'] = pd.to_numeric(data['Number vmail messages'], errors='coerce')
@@ -34,6 +36,7 @@ data['Customer service calls'] = pd.to_numeric(data['Customer service calls'], e
 print(data.info())
 print(data.isnull().sum())
 
+#The percentage of each state in the dataset
 state_counts = data['State'].value_counts(normalize=True) * 100
 plt.figure(figsize=(10, 6))
 sns.barplot(x=state_counts.index, y=state_counts.values)
@@ -45,6 +48,7 @@ plt.show()
 
 time.sleep(5)
 
+#The percentage of the people having vs not having international plan in the dataset
 international_plan_counts = (data['International plan'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(10, 6))
 plt.bar(international_plan_counts.index, international_plan_counts.values, color='blue')
@@ -56,6 +60,7 @@ plt.show()
 
 time.sleep(5)
 
+#The percentage of people having vs not having a voice mail plan in the dataset
 voice_mail_plan_counts = (data['Voice mail plan'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(10, 6))
 plt.bar(voice_mail_plan_counts.index, voice_mail_plan_counts.values, color='green')
@@ -67,6 +72,7 @@ plt.show()
 
 time.sleep(5)
 
+#The percentage of churn values in the dataset
 churn_counts = (data['Churn'].value_counts(normalize=True) * 100).sort_index()
 plt.figure(figsize=(6, 6))
 plt.pie(churn_counts.values, labels=churn_counts.index, autopct='%1.1f%%', startangle=140)
@@ -75,6 +81,7 @@ plt.show()
 
 time.sleep(5)
 
+#Question here!!! Ti einai account length??
 plt.figure(figsize=(10, 6))
 plt.hist(data['Account length'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Account length']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -91,6 +98,7 @@ plt.show()
 
 time.sleep(5)
 
+#Auto xreiazetai?
 plt.figure(figsize=(10, 6))
 plt.hist(data['Area code'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Area code']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -106,6 +114,7 @@ plt.title('QQ-plot για Κωδικό Περιοχής')
 plt.show()
 
 time.sleep(5)
+
 
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
@@ -459,6 +468,7 @@ numeric_columns = data.select_dtypes(include=np.number).columns
 fig, axes = plt.subplots(4, 4, figsize=(12, 12))
 axes = axes.flatten()
 
+# Βγαίνει μονο λευκη οθονη
 for i, col in enumerate(numeric_columns[:16]):
     axes[i].hist(data[col], density=True, bins='auto', alpha=0.7, label='Histogram')
     axes[i].plot(np.linspace(data[col].min(), data[col].max(), 100), norm.pdf(np.linspace(data[col].min(), data[col].max(), 100),
@@ -474,6 +484,7 @@ for i, col in enumerate(numeric_columns[:16]):
 fig, axes = plt.subplots(4, 4, figsize=(12, 12))
 axes = axes.flatten()
 
+#Το ιδιο και εδω βγαινει μονο το πρωτο οκ
 for i, col in enumerate(numeric_columns[:16]):
     y1 = data[col]
     axes[i].plot(np.sort(y1), np.arange(1, len(y1) + 1) / len(y1), label='Empirical CDF')
@@ -633,3 +644,30 @@ for alpha in alphas:
 
 
 
+#K-Nearest Neighbor Classification
+print("\nK-Nearest Neighbors Classifier\n")
+data_encoded = pd.get_dummies(data, columns=['International plan', 'Voice mail plan', 'State'])
+
+X = data_encoded.drop('Churn', axis=1)
+y = data_encoded['Churn']
+
+random_state = int(time.time())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
+
+neigh = KNeighborsClassifier(n_neighbors=3)
+neigh.fit(X_train, y_train)
+
+# Predictions on the test set
+y_pred = neigh.predict(X_test)
+
+# Print the predicted labels for the test set
+print("Predicted Labels for the Test Set:")
+print(y_pred)
+
+# Compute accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2%}")
+
+# Compute precision
+precision = precision_score(y_test, y_pred)
+print(f"Precision: {precision:.2%}")
