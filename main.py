@@ -19,8 +19,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 data = pd.read_csv('telecom_churn.csv')
-# print(data)
-# print(data.to_string())
 print(data.columns)
 print(data.describe())
 print(data.dtypes)
@@ -42,9 +40,9 @@ print(data.isnull().sum())
 state_counts = data['State'].value_counts(normalize=True) * 100
 plt.figure(figsize=(10, 6))
 sns.barplot(x=state_counts.index, y=state_counts.values)
-plt.xlabel('Κατάσταση')
+plt.xlabel('Πολιτεία')
 plt.ylabel('Ποσοστό (%)')
-plt.title('Κατάσταση')
+plt.title('Πολιτεία')
 plt.xticks(rotation=90)
 plt.show()
 
@@ -83,7 +81,7 @@ plt.show()
 
 time.sleep(5)
 
-#Question here!!! Ti einai account length??
+#The frequency of each Account Length
 plt.figure(figsize=(10, 6))
 plt.hist(data['Account length'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Account length']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -100,7 +98,7 @@ plt.show()
 
 time.sleep(5)
 
-#Auto xreiazetai?
+#The frequency of each Area code
 plt.figure(figsize=(10, 6))
 plt.hist(data['Area code'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Area code']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -117,7 +115,7 @@ plt.show()
 
 time.sleep(5)
 
-
+#The frequency of total day minutes
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total day minutes']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -134,6 +132,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total day calls
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total day calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -148,8 +147,9 @@ stats.probplot(data['Total day calls'], dist='norm', plot=plt)
 plt.title('QQ-plot για Συνολικά Τηλέφωνα Ημέρας')
 plt.show()
 
-time.sleep(10)
+time.sleep(5)
 
+#The frequency of total day charge
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total day charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total day charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -166,6 +166,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total eve calls
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total eve calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -182,6 +183,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total eve minutes
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total eve minutes']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -198,6 +200,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total eve charge
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total eve charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total eve charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -214,6 +217,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total night minutes
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total night minutes']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -230,6 +234,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total night calls
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total night calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -246,6 +251,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total night charge
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total night charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total night charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -262,6 +268,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total international calls
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total intl calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -278,6 +285,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total international minutes
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl minutes'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total intl minutes']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -294,6 +302,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of total international charge
 plt.figure(figsize=(10, 6))
 plt.hist(data['Total intl charge'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Total intl charge']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -310,6 +319,7 @@ plt.show()
 
 time.sleep(5)
 
+#The frequency of customer service calls
 plt.figure(figsize=(10, 6))
 plt.hist(data['Customer service calls'], bins=30, color='gray', alpha=0.7, edgecolor='black')
 plt.axvline(np.mean(data['Customer service calls']), color='red', linestyle='dashed', linewidth=2, label='Μέση')
@@ -326,59 +336,78 @@ plt.show()
 
 time.sleep(5)
 
-numeric_columns = data.select_dtypes(include=np.number).columns
-
-summary_stats = data[numeric_columns].describe().transpose()
-print(round(summary_stats, 2))
-
-def eda_plots(data, ask=False):
-    plt.close('all')
-    numeric_columns = data.select_dtypes(include=np.number).columns
-    y = data[numeric_columns]
-    n = len(numeric_columns)
-
-    for i in range(n):
-        if not ask:
-            plt.figure()
-            plt.subplot(2, 2, 1)
-            sns.violinplot(y.iloc[:, i])
-            plt.title('Violin Plot - ' + numeric_columns[i])
-
-            plt.subplot(2, 2, 2)
-            plt.hist(y.iloc[:, i], density=True)
-            plt.title('Histogram - ' + numeric_columns[i])
-            sns.kdeplot(y.iloc[:, i], color='r')
-
-            plt.subplot(2, 2, 3)
-            qqplot(y.iloc[:, i], line='s')
-            plt.title('QQ Plot - ' + numeric_columns[i])
-
-            plt.subplot(2, 2, 4)
-            plt.boxplot(y.iloc[:, i], vert=False)
-            plt.title('Boxplot - ' + numeric_columns[i])
-
-            time.sleep(5)
-
-        if not ask:
-            plt.tight_layout()
-            plt.show()
-
-        elif i == n - 1:
-            plt.show(block=True)
-
-
-eda_plots(data)
-
-eda_plots(data, ask=True)
+# Απο εδω και κατω υπαρχουν αρκετα θεματα στα γραφηματα - Δεν βγαινουν σωστα. Πιστευω καλυτερα να τα βγαλουμε εντελως εχουμε ηδη αρκετα γραφηματα ετσι κι αλλιως.
+# Οχι ολα οσα ειναι παρακατω, μονο αυτα που εχω κανει comment out.
+# def eda_plots(data, ask=False):
+#     plt.close('all')
+#     numeric_columns = data.select_dtypes(include=np.number).columns
+#     y = data[numeric_columns]
+#     n = len(numeric_columns)
+#     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 8))
+#
+#     for i in range(n):
+#         if not ask:
+#             # Plot Violin Plot
+#             axes[0, 0].violinplot(y.iloc[:, i], vert=False)
+#             axes[0, 0].set_title('Violin Plot - ' + numeric_columns[i])
+#
+#             # Plot Histogram with KDE
+#             axes[0, 1].hist(y.iloc[:, i], density=True, alpha=0.7)
+#             sns.kdeplot(y.iloc[:, i], color='r', ax=axes[0, 1])
+#
+#             # Plot QQ Plot
+#             qqplot(y.iloc[:, i], line='s', ax=axes[1, 0])
+#             axes[1, 0].set_title('QQ Plot - ' + numeric_columns[i])
+#
+#             # Plot Boxplot
+#             axes[1, 1].boxplot(y.iloc[:, i], vert=False)
+#             axes[1, 1].set_title('Boxplot - ' + numeric_columns[i])
+#             # plt.figure()
+#             # plt.subplot(2, 2, 1)
+#             # sns.violinplot(y.iloc[:, i])
+#             # plt.title('Violin Plot - ' + numeric_columns[i])
+#             #
+#             # plt.subplot(2, 2, 2)
+#             # plt.hist(y.iloc[:, i], density=True)
+#             # plt.title('Histogram - ' + numeric_columns[i])
+#             # sns.kdeplot(y.iloc[:, i], color='r')
+#             #
+#             # plt.subplot(2, 2, 3)
+#             # qqplot(y.iloc[:, i], line='s')
+#             # plt.title('QQ Plot - ' + numeric_columns[i])
+#             #
+#             # plt.subplot(2, 2, 4)
+#             # plt.boxplot(y.iloc[:, i], vert=False)
+#             # plt.title('Boxplot - ' + numeric_columns[i])
+#
+#             plt.tight_layout()
+#             time.sleep(5)
+#
+#         if not ask:
+#             plt.tight_layout()
+#             plt.show()
+#
+#         elif i == n - 1:
+#             plt.show(block=True)
+#
+#
+# eda_plots(data)
+#
+# eda_plots(data, ask=True)
 
 
 # Correlation
+numeric_columns = data.select_dtypes(include=np.number).columns
+summary_stats = data[numeric_columns].describe().transpose()
+print(round(summary_stats, 2))
 
 rounded_data = np.round(data[numeric_columns], 2)
+print("Rounded data:")
 print(rounded_data.describe())
 
 # Υπολογισμός πίνακα συσχέτισης Pearson
 correlation_pearson = data[numeric_columns].corr(method='pearson')
+print("Correlation Pearson:")
 print(correlation_pearson)
 
 # Σχεδίαση πίνακα συσχέτισης
@@ -425,27 +454,27 @@ plt.show()
 
 # Εύρεση ακραίων τιμών
 for col in numeric_columns:
-    # Πάρτε τις γραμμές του boxplot
-    lines = sns.boxplot(data=data[col], showfliers=False).get_lines()
+# Πάρτε τις γραμμές του boxplot
+     lines = sns.boxplot(data=data[col], showfliers=False).get_lines()
 
-    # Πάρτε τα δεδομένα των ακραίων τιμών
-    outliers = lines[0].get_ydata()
+# Πάρτε τα δεδομένα των ακραίων τιμών
+     outliers = lines[0].get_ydata()
 
-    if len(outliers) != 0:
-        print('-------------------------------------------------------')
-        print(f'Outliers for variable {col}')
-        print(f'{len(outliers)} outliers')
-        print(f'{round(100 * len(outliers) / len(data[col]), 1)}% outliers')
-        print(outliers)
+     if len(outliers) != 0:
+         print('-------------------------------------------------------')
+         print(f'Outliers for variable {col}')
+         print(f'{len(outliers)} outliers')
+         print(f'{round(100 * len(outliers) / len(data[col]), 1)}% outliers')
+         print(outliers)
 
 
 # --- Εκτέλεση των Chi-Square Tests και εμφάνιση των contingency tables
 
 def chi_square_test(cross_tab):
-    chi2, p, _, _ = chi2_contingency(cross_tab)
-    print(f"Chi-Square Value: {chi2:.4f}")
-    print(f"P-value: {p:.4f}")
-    print("")
+     chi2, p, _, _ = chi2_contingency(cross_tab)
+     print(f"Chi-Square Value: {chi2:.4f}")
+     print(f"P-value: {p:.4f}")
+     print("")
 
 
 # Churn vs State
@@ -463,41 +492,41 @@ chi_square_test(cross_tab_voice_mail_plan)
 # -----------------------------------------------------------------------------
 
 
-# Checking for Normality with density plots
-
-numeric_columns = data.select_dtypes(include=np.number).columns
-
-fig, axes = plt.subplots(4, 4, figsize=(12, 12))
-axes = axes.flatten()
-
-# Βγαίνει μονο λευκη οθονη
-for i, col in enumerate(numeric_columns[:16]):
-    axes[i].hist(data[col], density=True, bins='auto', alpha=0.7, label='Histogram')
-    axes[i].plot(np.linspace(data[col].min(), data[col].max(), 100), norm.pdf(np.linspace(data[col].min(), data[col].max(), 100),
-                 loc=data[col].mean(), scale=data[col].std()), label='Normal Distribution', linestyle='dashed', color='red')
-    axes[i].set_title(f'Density Plot of Variable {i+1}')
-    axes[i].legend()
-    plt.tight_layout()
-    plt.show()
-    time.sleep(5)
-
-#--- Checking for Normality with Cumulative Distribution function plots
-
-fig, axes = plt.subplots(4, 4, figsize=(12, 12))
-axes = axes.flatten()
-
-#Το ιδιο και εδω βγαινει μονο το πρωτο οκ
-for i, col in enumerate(numeric_columns[:16]):
-    y1 = data[col]
-    axes[i].plot(np.sort(y1), np.arange(1, len(y1) + 1) / len(y1), label='Empirical CDF')
-    index = np.linspace(np.min(y1), np.max(y1), 100)
-    cdf_normal = norm.cdf(index, loc=y1.mean(), scale=y1.std())
-    axes[i].plot(index, cdf_normal, label='Normal Distribution', linestyle='dashed', color='red')
-    axes[i].set_title(f'CDF Plot of Variable {i+1}')
-    axes[i].legend()
-    plt.tight_layout()
-    plt.show()
-    time.sleep(5)
+# # Checking for Normality with density plots
+#
+# numeric_columns = data.select_dtypes(include=np.number).columns
+#
+# fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+# axes = axes.flatten()
+#
+# # Βγαίνει μονο λευκη οθονη
+# for i, col in enumerate(numeric_columns[:16]):
+#     axes[i].hist(data[col], density=True, bins='auto', alpha=0.7, label='Histogram')
+#     axes[i].plot(np.linspace(data[col].min(), data[col].max(), 100), norm.pdf(np.linspace(data[col].min(), data[col].max(), 100),
+#                  loc=data[col].mean(), scale=data[col].std()), label='Normal Distribution', linestyle='dashed', color='red')
+#     axes[i].set_title(f'Density Plot of Variable {i+1}')
+#     axes[i].legend()
+#     plt.tight_layout()
+#     plt.show()
+#     time.sleep(5)
+#
+# #--- Checking for Normality with Cumulative Distribution function plots
+#
+# fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+# axes = axes.flatten()
+#
+# #Το ιδιο και εδω βγαινει μονο το πρωτο οκ
+# for i, col in enumerate(numeric_columns[:16]):
+#     y1 = data[col]
+#     axes[i].plot(np.sort(y1), np.arange(1, len(y1) + 1) / len(y1), label='Empirical CDF')
+#     index = np.linspace(np.min(y1), np.max(y1), 100)
+#     cdf_normal = norm.cdf(index, loc=y1.mean(), scale=y1.std())
+#     axes[i].plot(index, cdf_normal, label='Normal Distribution', linestyle='dashed', color='red')
+#     axes[i].set_title(f'CDF Plot of Variable {i+1}')
+#     axes[i].legend()
+#     plt.tight_layout()
+#     plt.show()
+#     time.sleep(5)
 
 #--- Skewness & kurtosis
 
