@@ -336,65 +336,6 @@ plt.show()
 
 time.sleep(5)
 
-# Απο εδω και κατω υπαρχουν αρκετα θεματα στα γραφηματα - Δεν βγαινουν σωστα. Πιστευω καλυτερα να τα βγαλουμε εντελως εχουμε ηδη αρκετα γραφηματα ετσι κι αλλιως.
-# Οχι ολα οσα ειναι παρακατω, μονο αυτα που εχω κανει comment out.
-# def eda_plots(data, ask=False):
-#     plt.close('all')
-#     numeric_columns = data.select_dtypes(include=np.number).columns
-#     y = data[numeric_columns]
-#     n = len(numeric_columns)
-#     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 8))
-#
-#     for i in range(n):
-#         if not ask:
-#             # Plot Violin Plot
-#             axes[0, 0].violinplot(y.iloc[:, i], vert=False)
-#             axes[0, 0].set_title('Violin Plot - ' + numeric_columns[i])
-#
-#             # Plot Histogram with KDE
-#             axes[0, 1].hist(y.iloc[:, i], density=True, alpha=0.7)
-#             sns.kdeplot(y.iloc[:, i], color='r', ax=axes[0, 1])
-#
-#             # Plot QQ Plot
-#             qqplot(y.iloc[:, i], line='s', ax=axes[1, 0])
-#             axes[1, 0].set_title('QQ Plot - ' + numeric_columns[i])
-#
-#             # Plot Boxplot
-#             axes[1, 1].boxplot(y.iloc[:, i], vert=False)
-#             axes[1, 1].set_title('Boxplot - ' + numeric_columns[i])
-#             # plt.figure()
-#             # plt.subplot(2, 2, 1)
-#             # sns.violinplot(y.iloc[:, i])
-#             # plt.title('Violin Plot - ' + numeric_columns[i])
-#             #
-#             # plt.subplot(2, 2, 2)
-#             # plt.hist(y.iloc[:, i], density=True)
-#             # plt.title('Histogram - ' + numeric_columns[i])
-#             # sns.kdeplot(y.iloc[:, i], color='r')
-#             #
-#             # plt.subplot(2, 2, 3)
-#             # qqplot(y.iloc[:, i], line='s')
-#             # plt.title('QQ Plot - ' + numeric_columns[i])
-#             #
-#             # plt.subplot(2, 2, 4)
-#             # plt.boxplot(y.iloc[:, i], vert=False)
-#             # plt.title('Boxplot - ' + numeric_columns[i])
-#
-#             plt.tight_layout()
-#             time.sleep(5)
-#
-#         if not ask:
-#             plt.tight_layout()
-#             plt.show()
-#
-#         elif i == n - 1:
-#             plt.show(block=True)
-#
-#
-# eda_plots(data)
-#
-# eda_plots(data, ask=True)
-
 
 # Correlation
 numeric_columns = data.select_dtypes(include=np.number).columns
@@ -490,43 +431,6 @@ cross_tab_voice_mail_plan = pd.crosstab(data['Churn'], data['Voice mail plan'])
 chi_square_test(cross_tab_voice_mail_plan)
 
 # -----------------------------------------------------------------------------
-
-
-# # Checking for Normality with density plots
-#
-# numeric_columns = data.select_dtypes(include=np.number).columns
-#
-# fig, axes = plt.subplots(4, 4, figsize=(12, 12))
-# axes = axes.flatten()
-#
-# # Βγαίνει μονο λευκη οθονη
-# for i, col in enumerate(numeric_columns[:16]):
-#     axes[i].hist(data[col], density=True, bins='auto', alpha=0.7, label='Histogram')
-#     axes[i].plot(np.linspace(data[col].min(), data[col].max(), 100), norm.pdf(np.linspace(data[col].min(), data[col].max(), 100),
-#                  loc=data[col].mean(), scale=data[col].std()), label='Normal Distribution', linestyle='dashed', color='red')
-#     axes[i].set_title(f'Density Plot of Variable {i+1}')
-#     axes[i].legend()
-#     plt.tight_layout()
-#     plt.show()
-#     time.sleep(5)
-#
-# #--- Checking for Normality with Cumulative Distribution function plots
-#
-# fig, axes = plt.subplots(4, 4, figsize=(12, 12))
-# axes = axes.flatten()
-#
-# #Το ιδιο και εδω βγαινει μονο το πρωτο οκ
-# for i, col in enumerate(numeric_columns[:16]):
-#     y1 = data[col]
-#     axes[i].plot(np.sort(y1), np.arange(1, len(y1) + 1) / len(y1), label='Empirical CDF')
-#     index = np.linspace(np.min(y1), np.max(y1), 100)
-#     cdf_normal = norm.cdf(index, loc=y1.mean(), scale=y1.std())
-#     axes[i].plot(index, cdf_normal, label='Normal Distribution', linestyle='dashed', color='red')
-#     axes[i].set_title(f'CDF Plot of Variable {i+1}')
-#     axes[i].legend()
-#     plt.tight_layout()
-#     plt.show()
-#     time.sleep(5)
 
 #--- Skewness & kurtosis
 
